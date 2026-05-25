@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroStay Engine | AI-Powered Sensory Ops Platform for UK Hospitality</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+:root{
+  /* NeuroStay Engine Colours: Deep Navy, Teal, Soft Ice */
+  --blue:#0B4F6C;
+  --blue-light:#1A7DA8;
+  --blue-dim:#0A3F57;
+  --blue-dark:#062A3A;
+  --blue-deeper:#031A25;
+
+  --accent:#00B4D8;
+  --accent-light:#ADE8F4;
+  --accent-dim:#48CAE4;
+
+  --nav-bg:#0B4F6C;
+  --footer-bg:#062A3A;
+
+  --bg-white:#F4FBFF;
+  --bg-light:#E8F4F9;
+  --bg-section:#CAE9F5;
+  --bg-card:#F4FBFF;
+
+  --card-border:rgba(11,79,108,0.18);
+  --card-border-strong:rgba(11,79,108,0.38);
+
+  --text-dark:#071A23;
+  --text-mid:#0D3A50;
+  --text-muted:#3A6A80;
+  --text-light:#7AAABA;
+  --white:#FFFFFF;
+
+  --nav-h:72px;
+  --max-w:1200px;
+  --font:'Plus Jakarta Sans',sans-serif;
+  --display:'Sora',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --ease:cubic-bezier(0.4,0,0.2,1);
+  --ease-out:cubic-bezier(0,0,0.2,1);
+}
+
+body{font-family:var(--font);color:var(--text-dark);background:var(--bg-white);overflow-x:hidden;}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg-light);}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px;}
+
+img{display:block;max-width:100%;}
+
+/* ─── NAVBAR ─────────────────────────────────────────── */
+.navbar{
+  position:fixed;top:0;left:0;width:100%;height:var(--nav-h);
+  background:var(--nav-bg);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,0.2);
+  z-index:1000;display:flex;align-items:center;
+  padding:0 clamp(16px,5vw,60px);
+  justify-content:space-between;
+  transition:border-color 0.3s;
+  box-shadow:0 2px 24px rgba(0,180,216,0.2);
+}
+.nav-logo{
+  font-family:var(--display);font-size:18px;font-weight:800;
+  color:var(--white);letter-spacing:-0.3px;
+  display:flex;align-items:center;gap:12px;
+  cursor:pointer;text-decoration:none;flex-shrink:0;
+}
+.nav-logo-icon{
+  width:40px;height:40px;
+  background:rgba(255,255,255,0.2);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  box-shadow:0 4px 14px rgba(0,0,0,0.15);
+  border:1px solid rgba(255,255,255,0.3);
+}
+.nav-logo-icon svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1;}
+.nav-logo-text span{font-size:10px;font-family:var(--mono);font-weight:500;color:rgba(255,255,255,0.7);letter-spacing:2px;text-transform:uppercase;margin-top:3px;}
+
+.nav-links{display:flex;align-items:center;gap:4px;list-style:none;}
+.nav-links li button{
+  background:none;border:none;
+  color:rgba(255,255,255,0.85);
+  font-size:11px;font-weight:600;
+  padding:8px 14px;border-radius:7px;
+  transition:all 0.22s var(--ease);
+  cursor:pointer;font-family:var(--mono);
+  letter-spacing:0.8px;text-transform:uppercase;
+  position:relative;white-space:nowrap;
+}
+.nav-links li button:hover{color:#fff;background:rgba(255,255,255,0.15);}
+.nav-links li button.active{color:#fff;background:rgba(255,255,255,0.2);}
+.nav-links li button.active::after{
+  content:'';position:absolute;bottom:5px;left:50%;
+  transform:translateX(-50%);width:14px;height:2px;
+  background:var(--accent);border-radius:2px;
+}
+
+.nav-right{display:flex;align-items:center;gap:10px;}
+.btn-demo-nav{
+  background:var(--white);
+  color:var(--blue-dark);border:none;padding:9px 20px;border-radius:8px;
+  font-size:11px;font-weight:700;cursor:pointer;
+  transition:all 0.22s;font-family:var(--mono);
+  letter-spacing:0.8px;text-transform:uppercase;white-space:nowrap;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+}
+.btn-demo-nav:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,0.25);background:var(--accent-light);}
+
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:none;border:none;flex-shrink:0;}
+.hamburger span{width:22px;height:2px;background:#fff;border-radius:2px;transition:0.3s;display:block;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+.mobile-nav{
+  display:none;position:fixed;top:var(--nav-h);left:0;width:100%;
+  background:var(--blue-dark);backdrop-filter:blur(20px);
+  padding:12px 20px 20px;flex-direction:column;gap:2px;
+  z-index:999;border-bottom:1px solid rgba(255,255,255,0.1);
+  animation:slideDown 0.25s var(--ease-out);
+}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+.mobile-nav.open{display:flex;}
+.mobile-nav button{
+  background:none;border:none;color:rgba(255,255,255,0.8);
+  font-size:13px;font-weight:600;padding:13px 12px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  cursor:pointer;font-family:var(--mono);text-align:left;
+  text-transform:uppercase;letter-spacing:1px;
+  transition:color 0.2s,background 0.2s;border-radius:6px;
+}
+.mobile-nav button:hover{color:#fff;background:rgba(255,255,255,0.1);}
+.mobile-nav .mob-cta{
+  margin-top:8px;background:var(--white);
+  color:var(--blue-dark);border:none;padding:13px;
+  border-radius:8px;font-weight:700;font-size:12px;
+  letter-spacing:1px;text-transform:uppercase;cursor:pointer;
+  font-family:var(--mono);
+}
+
+/* ─── PAGE SYSTEM ─────────────────────────────────────── */
+.page{display:none;min-height:100vh;padding-top:var(--nav-h);}
+.page.active{display:block;animation:pgIn 0.35s var(--ease);}
+@keyframes pgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ─── SECTION COMMONS ─────────────────────────────────── */
+.label-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--blue-dim);margin-bottom:14px;
+}
+.label-tag::before{content:'';width:20px;height:1px;background:var(--blue);}
+.label-tag-white{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  color:rgba(255,255,255,0.8);margin-bottom:14px;
+}
+.label-tag-white::before{content:'';width:20px;height:1px;background:rgba(255,255,255,0.6);}
+
+.section-h2{
+  font-family:var(--display);font-size:clamp(28px,3.5vw,52px);
+  font-weight:800;line-height:1.1;letter-spacing:-0.8px;
+  margin-bottom:10px;
+}
+.section-h2.blue-txt{color:var(--blue-dark);}
+.section-h2.dark{color:var(--text-dark);}
+.section-h2.white{color:var(--white);}
+
+.section-divider{width:56px;height:3px;margin:16px 0 28px;border-radius:2px;}
+.divider-blue{background:linear-gradient(90deg,var(--blue),transparent);}
+.divider-white{background:linear-gradient(90deg,rgba(255,255,255,0.8),transparent);}
+.divider-center{margin:16px auto 28px;}
+
+.para-dark{color:var(--text-mid);line-height:1.85;font-size:17px;}
+.para-light{color:rgba(255,255,255,0.85);line-height:1.85;font-size:17px;}
+
+.container{max-width:var(--max-w);margin:0 auto;padding:0 clamp(16px,4vw,60px);}
+
+/* ─── BUTTONS ─────────────────────────────────────────── */
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  color:var(--white);padding:13px 28px;border-radius:8px;
+  text-decoration:none;font-weight:700;font-size:12px;
+  letter-spacing:0.8px;text-transform:uppercase;
+  transition:all 0.25s;font-family:var(--mono);border:none;cursor:pointer;
+  box-shadow:0 4px 16px rgba(11,79,108,0.35);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(11,79,108,0.5);}
+
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1.5px solid var(--blue);color:var(--blue-dark);
+  padding:12px 28px;border-radius:8px;text-decoration:none;
+  font-weight:700;font-size:12px;letter-spacing:0.8px;
+  text-transform:uppercase;transition:all 0.25s;
+  font-family:var(--mono);background:none;cursor:pointer;
+}
+.btn-secondary:hover{background:rgba(11,79,108,0.08);border-color:var(--blue-dim);}
+
+.btn-white{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--white);color:var(--blue-dark);
+  padding:12px 28px;border-radius:8px;
+  font-weight:700;font-size:12px;letter-spacing:0.8px;
+  text-transform:uppercase;transition:all 0.25s;
+  font-family:var(--mono);border:none;cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,0,0,0.12);
+}
+.btn-white:hover{transform:translateY(-2px);background:var(--accent-light);box-shadow:0 8px 28px rgba(0,0,0,0.2);}
+
+/* ─── STATUS BADGES ─────────────────────────────── */
+.risk-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:700;font-family:var(--mono);letter-spacing:0.5px;
+}
+.risk-blue{background:rgba(11,79,108,0.1);color:var(--blue-dim);border:1px solid rgba(11,79,108,0.28);}
+.risk-light{background:rgba(173,232,244,0.5);color:var(--blue-dark);border:1px solid rgba(11,79,108,0.25);}
+.risk-green{background:rgba(16,185,129,0.1);color:#059669;border:1px solid rgba(16,185,129,0.25);}
+.risk-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+
+/* ─── HERO ─────────────────────────────────────────────── */
+.hero{
+  background:linear-gradient(140deg,#E8F4F9 0%,#CAE9F5 40%,#ADE8F4 100%);
+  padding:clamp(60px,10vw,100px) 0 clamp(50px,8vw,80px);
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-80px;right:-80px;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(11,79,108,0.12) 0%,transparent 70%);
+}
+.hero-inner{
+  max-width:var(--max-w);margin:0 auto;
+  padding:0 clamp(16px,4vw,60px);
+  display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);
+  align-items:center;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(11,79,108,0.12);border:1px solid rgba(11,79,108,0.3);
+  border-radius:30px;padding:6px 16px;
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  color:var(--blue-dim);letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:22px;
+}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+h1{
+  font-family:var(--display);font-size:clamp(34px,5vw,64px);
+  font-weight:800;line-height:1.06;letter-spacing:-1.5px;color:var(--text-dark);
+  margin-bottom:6px;
+}
+h1 .blue{color:var(--blue);}
+h1 .dark-blue{color:var(--blue-dark);}
+.hero-rule{width:48px;height:3px;background:linear-gradient(90deg,var(--accent),var(--blue));border-radius:2px;margin:20px 0;}
+.hero-body{font-size:17px;color:var(--text-mid);line-height:1.8;margin-bottom:28px;max-width:540px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+
+.hero-mini-stats{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;}
+.hero-mini-card{
+  background:rgba(255,255,255,0.8);
+  border:1px solid rgba(11,79,108,0.2);
+  border-radius:12px;padding:14px 18px;min-width:140px;
+  backdrop-filter:blur(8px);
+}
+.hero-mini-card strong{
+  display:block;font-family:var(--display);
+  font-size:22px;font-weight:800;color:var(--blue-dark);
+}
+.hero-mini-card span{font-size:11px;color:var(--text-muted);font-family:var(--mono);}
+
+/* DASHBOARD CARD */
+.score-card{
+  background:#fff;border-radius:18px;
+  border:1px solid rgba(11,79,108,0.18);
+  padding:24px;box-shadow:0 8px 40px rgba(11,79,108,0.12);
+}
+.score-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;}
+.score-card-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;}
+.dashboard-title{font-family:var(--display);font-size:17px;font-weight:700;color:var(--text-dark);}
+.live-dot-wrap{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;font-weight:700;color:var(--accent);letter-spacing:1.5px;}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 1.5s infinite;}
+.score-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(11,79,108,0.08);}
+.score-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;flex-shrink:0;}
+.score-icon.blue-bg{background:rgba(11,79,108,0.12);color:var(--blue-dim);}
+.score-icon.light-bg{background:rgba(173,232,244,0.4);color:var(--blue-dark);}
+.score-icon.green-bg{background:rgba(16,185,129,0.1);color:#059669;}
+.score-lbl{flex:1;font-size:12px;color:var(--text-muted);}
+.score-val{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text-dark);}
+.score-big{display:flex;align-items:center;gap:16px;margin-top:18px;padding:16px;background:linear-gradient(135deg,rgba(11,79,108,0.08),rgba(173,232,244,0.15));border-radius:12px;border:1px solid rgba(11,79,108,0.15);}
+.score-big-num{font-family:var(--display);font-size:48px;font-weight:800;color:var(--blue);line-height:1;}
+.score-big-info .label{font-size:13px;font-weight:700;color:var(--text-dark);}
+.score-big-info .sub{font-size:11px;color:var(--text-muted);margin-top:3px;font-family:var(--mono);}
+
+/* ─── STATS STRIP ─────────────────────────────────────── */
+.section-blue{
+  background:linear-gradient(135deg,var(--blue-dark) 0%,var(--blue-deeper) 100%);
+  padding:clamp(60px,8vw,96px) 0;
+}
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px;
+}
+.stat-card{
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);
+  border-radius:16px;padding:clamp(20px,3vw,30px);
+  text-align:center;transition:transform 0.25s,border-color 0.25s;
+}
+.stat-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.3);}
+.stat-num{font-family:var(--display);font-size:clamp(32px,4vw,48px);font-weight:800;color:#fff;margin-bottom:10px;}
+.stat-lbl{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.6;}
+
+/* ─── PLATFORM SECTION ─────────────────────────────────── */
+.platform-section{background:var(--bg-white);padding:clamp(60px,8vw,96px) 0;}
+.platform-sub{max-width:760px;margin-bottom:44px;color:var(--text-mid);}
+.platform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+.platform-card{
+  background:#fff;border:1px solid rgba(11,79,108,0.15);
+  border-radius:18px;overflow:hidden;
+  transition:border-color 0.3s,box-shadow 0.3s,transform 0.3s;
+  box-shadow:0 2px 12px rgba(11,79,108,0.06);
+}
+.platform-card:hover{border-color:rgba(11,79,108,0.35);box-shadow:0 12px 40px rgba(11,79,108,0.12);transform:translateY(-3px);}
+.platform-img-wrap{width:100%;height:180px;overflow:hidden;background:linear-gradient(135deg,var(--bg-light),var(--bg-section));}
+.platform-img-wrap img{width:100%;height:100%;object-fit:cover;}
+.platform-card .inner{padding:22px;}
+.element-badge{
+  display:inline-block;background:rgba(11,79,108,0.1);
+  color:var(--blue-dim);border-radius:6px;
+  padding:3px 10px;font-family:var(--mono);font-size:9px;
+  font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:12px;border:1px solid rgba(11,79,108,0.18);
+}
+.platform-card h3{font-family:var(--display);font-size:17px;font-weight:700;color:var(--text-dark);margin-bottom:10px;line-height:1.3;}
+.platform-card p{font-size:13px;color:var(--text-muted);line-height:1.75;}
+.more-text{display:none;font-size:13px;color:var(--text-muted);line-height:1.75;margin-top:10px;padding-top:10px;border-top:1px solid rgba(11,79,108,0.1);}
+.platform-card.open .more-text{display:block;}
+.expand-btn{
+  margin-top:16px;background:none;border:1px solid rgba(11,79,108,0.28);
+  color:var(--blue-dim);padding:7px 18px;border-radius:7px;
+  font-size:11px;font-weight:700;cursor:pointer;font-family:var(--mono);
+  letter-spacing:0.8px;text-transform:uppercase;transition:all 0.2s;
+}
+.expand-btn:hover{background:rgba(11,79,108,0.08);border-color:var(--blue);}
+
+/* ─── WHY SECTION ─────────────────────────────────────── */
+.why-section{background:var(--bg-light);padding:clamp(60px,8vw,96px) 0;}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:44px;}
+.why-card{
+  background:#fff;border:1px solid rgba(11,79,108,0.15);
+  border-radius:16px;padding:clamp(20px,3vw,30px);
+  transition:border-color 0.25s,box-shadow 0.25s;
+}
+.why-card:hover{border-color:rgba(11,79,108,0.35);box-shadow:0 8px 28px rgba(11,79,108,0.1);}
+.why-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(11,79,108,0.12),rgba(173,232,244,0.2));
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;font-size:20px;color:var(--blue);
+  border:1px solid rgba(11,79,108,0.18);
+}
+.why-card h4{font-family:var(--display);font-size:16px;font-weight:700;color:var(--text-dark);margin-bottom:10px;}
+.why-card p{font-size:13px;color:var(--text-muted);line-height:1.75;}
+
+/* ─── SECTION LIGHT / ALT ─────────────────────────────── */
+.section-light{background:var(--bg-white);padding:clamp(60px,8vw,96px) 0;}
+.section-alt{background:var(--bg-light);padding:clamp(60px,8vw,96px) 0;}
+
+/* ─── MARKET CHARTS ─────────────────────────────────────── */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:44px;}
+.chart-card{
+  background:#fff;border:1px solid rgba(11,79,108,0.15);
+  border-radius:18px;padding:24px;
+  box-shadow:0 4px 16px rgba(11,79,108,0.06);
+}
+.chart-card h4{font-family:var(--display);font-size:15px;font-weight:700;color:var(--text-dark);margin-bottom:4px;}
+.chart-card p{font-size:12px;color:var(--text-muted);margin-bottom:20px;font-family:var(--mono);}
+.chart-wrap{height:260px;position:relative;}
+
+/* ─── ABOUT PAGE ─────────────────────────────────────────── */
+.about-hero{
+  background:linear-gradient(140deg,#CAE9F5 0%,#ADE8F4 60%,#48CAE4 100%);
+  padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);
+  position:relative;overflow:hidden;
+}
+.about-hero::after{
+  content:'';position:absolute;bottom:-60px;left:-60px;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,rgba(11,79,108,0.15) 0%,transparent 70%);
+}
+.about-hero .container{position:relative;z-index:1;}
+.founders-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:44px;}
+.founder-card{
+  background:#fff;border:1px solid rgba(11,79,108,0.15);
+  border-radius:18px;padding:clamp(20px,3vw,36px);
+  box-shadow:0 4px 20px rgba(11,79,108,0.08);
+}
+.founder-img{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-dark));display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:24px;font-weight:800;color:#fff;margin-bottom:16px;}
+.founder-card h3{font-family:var(--display);font-size:20px;font-weight:700;color:var(--text-dark);margin-bottom:4px;}
+.founder-card .role{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--blue-dim);margin-bottom:14px;}
+.founder-card p{font-size:13px;color:var(--text-muted);line-height:1.8;}
+.founder-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+.f-badge{background:rgba(11,79,108,0.08);border:1px solid rgba(11,79,108,0.18);border-radius:20px;padding:4px 12px;font-family:var(--mono);font-size:10px;color:var(--blue-dim);letter-spacing:0.5px;}
+
+/* ─── FAQ ─────────────────────────────────────────────── */
+.faq-wrap{display:flex;flex-direction:column;gap:12px;margin-top:32px;}
+.faq-item{background:#fff;border:1px solid rgba(11,79,108,0.15);border-radius:14px;overflow:hidden;}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;gap:16px;}
+.faq-q h4{font-family:var(--display);font-size:15px;font-weight:600;color:var(--text-dark);}
+.faq-icon{font-size:20px;font-weight:300;color:var(--blue);flex-shrink:0;transition:transform 0.3s;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+.faq-body{display:none;padding:0 22px 18px;font-size:14px;color:var(--text-muted);line-height:1.8;border-top:1px solid rgba(11,79,108,0.08);}
+.faq-item.open .faq-body{display:block;}
+
+/* ─── PRICING ─────────────────────────────────────────── */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:44px;}
+.price-card{
+  background:#fff;border:1px solid rgba(11,79,108,0.15);
+  border-radius:18px;padding:clamp(22px,3vw,36px);
+  position:relative;transition:border-color 0.25s,box-shadow 0.25s,transform 0.25s;
+  box-shadow:0 4px 16px rgba(11,79,108,0.06);
+}
+.price-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(11,79,108,0.14);}
+.price-card.featured{
+  border:2px solid var(--blue);
+  box-shadow:0 8px 40px rgba(11,79,108,0.18);
+  transform:scale(1.03);
+}
+.price-card.featured:hover{transform:scale(1.03) translateY(-4px);}
+.featured-label{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  color:#fff;padding:4px 18px;border-radius:20px;
+  font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  white-space:nowrap;
+}
+.price-tier{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--blue-dim);margin-bottom:8px;}
+.price-title{font-family:var(--display);font-size:20px;font-weight:700;color:var(--text-dark);margin-bottom:12px;}
+.price-amount{font-family:var(--display);font-size:clamp(34px,4vw,48px);font-weight:800;color:var(--blue-dark);line-height:1;}
+.price-amount span{font-size:16px;font-weight:500;color:var(--text-muted);}
+.price-desc{font-size:13px;color:var(--text-muted);margin:12px 0 20px;line-height:1.6;}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.price-features li{font-size:13px;color:var(--text-mid);display:flex;align-items:flex-start;gap:8px;}
+.price-features li::before{content:'✓';color:var(--accent);font-weight:700;flex-shrink:0;margin-top:1px;}
+
+/* ─── PROCESS ─────────────────────────────────────────── */
+.process-step{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(30px,5vw,72px);align-items:center;
+  margin-bottom:clamp(56px,8vw,96px);
+}
+.process-step:last-child{margin-bottom:0;}
+.step-num{font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--blue-dim);margin-bottom:12px;}
+.step-h3{font-family:var(--display);font-size:clamp(22px,2.5vw,32px);font-weight:800;color:var(--text-dark);margin-bottom:16px;line-height:1.2;}
+.step-p{color:var(--text-muted);font-size:15px;line-height:1.8;margin-bottom:18px;}
+.step-img{width:100%;aspect-ratio:16/10;border-radius:16px;border:1px solid rgba(11,79,108,0.15);overflow:hidden;box-shadow:0 8px 32px rgba(11,79,108,0.1);}
+.step-img img{width:100%;height:100%;object-fit:cover;}
+
+/* ─── CONTACT ─────────────────────────────────────────── */
+.contact-wrap{display:grid;grid-template-columns:1.3fr 1fr;gap:48px;align-items:start;}
+.contact-form{background:#fff;border:1px solid rgba(11,79,108,0.15);border-radius:20px;padding:clamp(24px,4vw,40px);box-shadow:0 8px 32px rgba(11,79,108,0.08);}
+.contact-form h3{font-family:var(--display);font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:10px;}
+.contact-form p{font-size:14px;color:var(--text-muted);margin-bottom:28px;line-height:1.6;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:12px;font-weight:700;color:var(--text-dark);margin-bottom:7px;font-family:var(--mono);letter-spacing:0.5px;text-transform:uppercase;}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:12px 16px;border:1.5px solid rgba(11,79,108,0.18);
+  border-radius:10px;font-size:14px;font-family:var(--font);
+  color:var(--text-dark);background:#fff;
+  transition:border-color 0.2s,box-shadow 0.2s;outline:none;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,79,108,0.1);}
+.form-group textarea{min-height:120px;resize:vertical;}
+.contact-info{display:flex;flex-direction:column;gap:0;}
+.contact-info h3{font-family:var(--display);font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:16px;}
+.contact-info p{font-size:15px;color:var(--text-muted);line-height:1.7;margin-bottom:28px;}
+.contact-detail{display:flex;align-items:flex-start;gap:16px;padding:16px 0;border-bottom:1px solid rgba(11,79,108,0.1);}
+.contact-detail .icon{width:44px;height:44px;background:rgba(11,79,108,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--blue);flex-shrink:0;font-size:18px;}
+.contact-detail .text strong{display:block;font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:2px;}
+.contact-detail .text span{font-size:13px;color:var(--text-muted);}
+
+/* ─── FOOTER ─────────────────────────────────────────── */
+footer{background:var(--footer-bg);padding:clamp(48px,6vw,80px) 0 0;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px;}
+.footer-brand{font-family:var(--display);font-size:22px;font-weight:800;color:#fff;margin-bottom:14px;}
+.footer-desc{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:20px;}
+.footer-badges{display:flex;flex-wrap:wrap;gap:8px;}
+.footer-badge{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:4px 12px;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.8);letter-spacing:0.5px;}
+.footer-col-title{font-family:var(--mono);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:16px;}
+.footer-col{display:flex;flex-direction:column;gap:10px;}
+.footer-col a{font-size:13px;color:rgba(255,255,255,0.65);cursor:pointer;transition:color 0.2s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom-bar{border-top:1px solid rgba(255,255,255,0.1);padding:20px 0;display:flex;align-items:center;justify-content:space-between;}
+.footer-bottom-bar p{font-size:12px;color:rgba(255,255,255,0.45);font-family:var(--mono);}
+.footer-bottom-bar p span{color:rgba(255,255,255,0.7);}
+.footer-bottom-links{display:flex;gap:20px;}
+.footer-bottom-links a{font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;font-family:var(--mono);transition:color 0.2s;}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.85);}
+
+/* ─── COMPARISON TABLE ───────────────────────── */
+.comp-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:40px;border-radius:16px;border:1px solid rgba(11,79,108,0.15);box-shadow:0 4px 16px rgba(11,79,108,0.06);}
+.comp-table{width:100%;border-collapse:collapse;background:#fff;}
+.comp-table th{background:linear-gradient(135deg,var(--blue-dark),var(--blue-deeper));color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:16px 18px;text-align:left;}
+.comp-table th:first-child{border-radius:16px 0 0 0;}
+.comp-table th:last-child{border-radius:0 16px 0 0;}
+.comp-table td{padding:14px 18px;font-size:13px;color:var(--text-mid);border-bottom:1px solid rgba(11,79,108,0.08);}
+.comp-table tr:last-child td{border-bottom:none;}
+.comp-table tr:hover td{background:rgba(11,79,108,0.03);}
+.comp-table td:first-child{font-weight:600;color:var(--text-dark);}
+.comp-table .yes{color:#059669;font-weight:700;}
+.comp-table .no{color:#94a3b8;font-weight:500;}
+.comp-table .highlight-col{background:rgba(11,79,108,0.06);}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:900px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .btn-demo-nav{display:none;}
+
+  .hero-inner{grid-template-columns:1fr;gap:40px;}
+  .hero-inner > div:last-child{display:none;}
+  .hero .hero-mini-stats{display:none;}
+
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .platform-grid{grid-template-columns:1fr;}
+  .why-grid{grid-template-columns:1fr 1fr;}
+  .pricing-grid{grid-template-columns:1fr;}
+  .price-card.featured{transform:scale(1);}
+  .process-step{grid-template-columns:1fr;gap:28px;}
+  .step-img{aspect-ratio:16/9;}
+  .contact-wrap{grid-template-columns:1fr;}
+  .charts-grid{grid-template-columns:1fr;}
+  .founders-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .footer-bottom-bar{flex-direction:column;align-items:flex-start;gap:10px;}
+  .footer-bottom-links{flex-wrap:wrap;gap:12px;}
+  .section-light [style*="grid-template-columns:1fr 1fr"],
+  .section-alt [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr !important;}
+  [style*="grid-template-columns:repeat(3,1fr)"]{grid-template-columns:1fr !important;}
+  .addons-grid{grid-template-columns:1fr !important;}
+}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  .why-grid{grid-template-columns:1fr;}
+  .hero-mini-stats{flex-direction:column;}
+  .hero-mini-card{min-width:unset;width:100%;}
+  .btn-primary,.btn-secondary,.btn-white{width:100%;justify-content:center;}
+  .footer-bottom-links{flex-direction:column;gap:8px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════════ -->
+<nav class="navbar">
+  <a class="nav-logo" onclick="showPage('home')">
+    <div class="nav-logo-text">
+      NeuroStay Engine
+      <span>Sensory Ops · AI Platform</span>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><button id="nav-home" class="active" onclick="showPage('home')">Home</button></li>
+    <li><button id="nav-about" onclick="showPage('about')">About</button></li>
+    <li><button id="nav-platform" onclick="showPage('platform')">Platform</button></li>
+    <li><button id="nav-market" onclick="showPage('market')">Market</button></li>
+    <li><button id="nav-process" onclick="showPage('process')">Process</button></li>
+    <li><button id="nav-faq" onclick="showPage('faq')">FAQ</button></li>
+    <li><button id="nav-pricing" onclick="showPage('pricing')">Pricing</button></li>
+    <li><button id="nav-contact" onclick="showPage('contact')">Contact</button></li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="btn-demo-nav" onclick="showPage('contact')">Request Demo</button>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button onclick="showPage('home');closeMobile()">Home</button>
+  <button onclick="showPage('about');closeMobile()">About</button>
+  <button onclick="showPage('platform');closeMobile()">Platform</button>
+  <button onclick="showPage('market');closeMobile()">Market</button>
+  <button onclick="showPage('process');closeMobile()">Process</button>
+  <button onclick="showPage('faq');closeMobile()">FAQ</button>
+  <button onclick="showPage('pricing');closeMobile()">Pricing</button>
+  <button onclick="showPage('contact');closeMobile()">Contact</button>
+  <button class="mob-cta" onclick="showPage('contact');closeMobile()">Request Demo →</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE : HOME
+═══════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          UK's First Sensory-Aware Hotel Operating Platform
+        </div>
+        <h1>
+          Understand Minds.<br>
+          <span class="blue">Match</span> Rooms.
+          <span class="dark-blue">Transform Stays.</span>
+        </h1>
+        <div class="hero-rule"></div>
+        <p class="hero-body">
+          NeuroStay Engine is an AI-powered operational accessibility and sensory-to-stay automation platform for UK independent hotels. We eliminate the "Neuroinclusive Experience Gap"  profiling, matching, and standardising room environmental allocations to maximise guest comfort, eliminate checkout disputes, and protect proprietary operational stay memory.
+        </p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="showPage('contact')">Book a Platform Demo</button>
+          <button class="btn-secondary" onclick="showPage('platform')">Explore Platform</button>
+        </div>
+      </div>
+      <!-- DASHBOARD -->
+      <div>
+        <div class="score-card">
+          <div class="score-card-top">
+            <div>
+              <div class="score-card-label">NeuroStay Engine · Live Dashboard</div>
+              <h3 class="dashboard-title">Sensory Room Intelligence</h3>
+            </div>
+            <div class="live-dot-wrap"><span class="live-dot"></span>LIVE</div>
+          </div>
+          <div class="score-row">
+            <div class="score-icon blue-bg">SM</div>
+            <span class="score-lbl">Sensory Match Accuracy</span>
+            <span class="score-val">92% ↑15.3%</span>
+          </div>
+          <div class="score-row">
+            <div class="score-icon green-bg">CD</div>
+            <span class="score-lbl">Checkout Disputes Reduced</span>
+            <span class="score-val">–28% vs baseline</span>
+          </div>
+          <div class="score-row">
+            <div class="score-icon light-bg">RS</div>
+            <span class="score-lbl">Room Swaps at Peak Hours</span>
+            <span class="score-val">–35% ↓ peak load</span>
+          </div>
+          <div class="score-row">
+            <div class="score-icon blue-bg">GS</div>
+            <span class="score-lbl">Guest Satisfaction Score</span>
+            <span class="score-val">4.3/5 ★ ↑18%</span>
+          </div>
+          <div class="score-big">
+            <div class="score-big-num">£10.6<span style="font-size:24px;">K</span></div>
+            <div class="score-big-info">
+              <div class="label">Friction Tax Saved / Receptionist</div>
+              <div class="sub">Sensory Ops · Stay Equity · Annual Saving</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <section class="section-blue">
+    <div class="container">
+      <div class="label-tag-white">The UK Neuroinclusive Experience Gap</div>
+      <h2 class="section-h2 white">UK Hotels Are Losing Millions to<br>Unmanaged Sensory Room Allocation.</h2>
+      <div class="section-divider divider-white"></div>
+      <p class="para-light" style="max-width:760px;">
+        Over 80% of disabled guests have non-visible cognitive, physical, or sensory impairments  yet hotels still treat accessibility as mere wheelchair compliance (only 8% of the disabled population). The result: a "Friction Tax" of £10,600 per receptionist annually in productivity leakages, checkout refunds, and comped amenities. NeuroStay Engine ends this cycle with predictive sensory-to-stay automation.
+      </p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num">£15.3B</div>
+          <div class="stat-lbl">Annual UK "Purple Pound" accessible tourism market  currently underserved by operational sensory tools</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">84%</div>
+          <div class="stat-lbl">Of UK hotels rely on reactive manual checking for all accessibility requests  creating an unsustainable bottleneck</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">49.5%</div>
+          <div class="stat-lbl">Of front-office teams spend 1–3 hours daily manually correcting room allocations and resolving checkout disputes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">34%</div>
+          <div class="stat-lbl">Of guest preference loss occurs during staff turnover  destroying proprietary room allocation memory permanently</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATFORM PREVIEW -->
+  <section class="platform-section">
+    <div class="container">
+      <div class="label-tag">Core Intelligence Modules</div>
+      <h2 class="section-h2 dark">Six Modules. One Complete Sensory Ops Platform.</h2>
+      <div class="section-divider divider-blue"></div>
+      <p class="para-dark platform-sub">
+        NeuroStay Engine combines Sensory Room Fingerprinting, Guest Preference Vectoring, Real-Time Risk Scoring, Stay-Outcome Learning Memory, Community Benchmarking, and PMS-Agnostic Integration into one unified SaaS platform  no complex retrofits, no specialist medical knowledge required.
+      </p>
+
+      <div class="platform-grid">
+        <!-- CARD 1 -->
+        <div class="platform-card">
+          <div class="platform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80" alt="Sensory Room Fingerprint Engine">
+          </div>
+          <div class="inner">
+            <div class="element-badge">Module 01</div>
+            <h3>Sensory Room Fingerprint Engine</h3>
+            <p>Uses machine learning and spatial data analysis to map and "fingerprint" the quiet, light-controlled, and crowd-isolated rooms on a property  assigning an empirical sensory index to every room.</p>
+            <div class="more-text">Parses historical operational data  proximity to elevator noise shafts, housekeeping cart transit patterns, street-glare, and mechanical plant vibrations  to create a reusable, benchmarked hospitality asset. Once an experienced receptionist configures the optimal room for an ADHD guest, NeuroStay Engine "fingerprints" that match for instant replication by junior staff.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Learn More</button>
+          </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="platform-card">
+          <div class="platform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80" alt="Guest Preference Vector Matching">
+          </div>
+          <div class="inner">
+            <div class="element-badge">Module 02</div>
+            <h3>Sensory-to-Stay Compatibility Matching</h3>
+            <p>Automatically deconstructs unstructured guest requests into a structured Guest Preference Vector (GPV)  mapping them against available room fingerprints without requiring specialist medical knowledge.</p>
+            <div class="more-text">The Sensory-to-Stay Compatibility Algorithm calculates a compatibility percentage between guest needs and room environmental conditions, completely removing the need for reception staff to manually interpret cognitive or sensory requirements. Coupled with Real-Time Sensory Risk Scoring, the system identifies exactly where a room assignment breaks down before check-in.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Learn More</button>
+          </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="platform-card">
+          <div class="platform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&q=80" alt="Stay Outcome Learning Memory">
+          </div>
+          <div class="inner">
+            <div class="element-badge">Module 03</div>
+            <h3>Stay-Outcome Learning Memory (OLM)</h3>
+            <p>Post-stay feedback events are transformed into structured "Stay Intelligence Assets"  mapping guest satisfaction ratings back to the original room fingerprint and preference vector.</p>
+            <div class="more-text">The OLM generates comprehensive reports linking specific sensory matches to key property metrics including occupancy rates, direct bookings, and ADR impact. This provides independent hotel owners with the same level of strategic "Sensory Ops" intelligence used by multinational luxury chains  at a fraction of the cost.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Learn More</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY SECTION -->
+  <section class="why-section">
+    <div class="container">
+      <div class="label-tag">Why NeuroStay Engine</div>
+      <h2 class="section-h2 dark">Built for Sensory-Aware Hospitality.<br>Not Just an Accessibility Checkbox.</h2>
+      <div class="section-divider divider-blue"></div>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-brain"></i></div>
+          <h4>Closed-Loop Sensory Lifecycle</h4>
+          <p>A first-of-its-kind operational framework bridging unstructured guest sensory preferences and real-time room allocation  creating a continuous feedback loop that improves matching accuracy with every stay.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-dna"></i></div>
+          <h4>Operational Stay Memory</h4>
+          <p>Captures proprietary "Sensory DNA" lost during the UK hospitality sector's high staff turnover. When an experienced receptionist departs, their room allocation logic stays permanently encoded in the platform.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-shield-alt"></i></div>
+          <h4>Equality Act 2010 Compliance</h4>
+          <p>Provides audit-ready trails of "reasonable adjustments" for non-visible disabilities  ensuring independent hotels remain compliant with the Equality Act 2010 and the European Accessibility Act (June 2025).</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-plug"></i></div>
+          <h4>PMS-Agnostic Integration</h4>
+          <p>Built to sit cleanly above existing Property Management Systems (Opera PMS, Mews, Guestline, Cloudbeds) via standard API syncs  enriching standard reservations without disrupting core booking architectures.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-leaf"></i></div>
+          <h4>ESG & Purple Pound Aligned</h4>
+          <p>Reduces UK lodging operational waste by 20–30% per property. Converts qualitative guest comfort into structured digital assets, directly benefiting the UK's £15.3 billion accessible tourism market.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-pound-sign"></i></div>
+          <h4>SME-Optimised SaaS Pricing</h4>
+          <p>Tiered SaaS from £100/month  giving independent UK boutique hotels enterprise-level sensory matching without capital-intensive physical retrofits or dedicated hospitality data science teams.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- end page home -->
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE : ABOUT
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-about">
+  <section class="about-hero">
+    <div class="container">
+      <div class="label-tag">About Us</div>
+      <h2 class="section-h2 dark">Built by a Hotelier Who Lived the Problem.<br><span style="color:var(--blue-dark);">Designed to Close the Neuroinclusive Gap.</span></h2>
+      <div class="section-divider divider-blue"></div>
+      <p class="para-dark" style="max-width:680px;margin-bottom:40px;">NeuroStay Engine is a UK-based B2B SaaS venture founded by Nirose Prajapati  combining front-line hotel operations expertise across Opera PMS, night audits, and reservation management with deep research into the "Neuroinclusive Experience Gap" that costs the UK hospitality sector millions annually in checkout disputes, room-mismatch refunds, and lost Purple Pound bookings.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('contact')">Get in Touch</button>
+        <button class="btn-secondary" onclick="showPage('platform')">Explore Platform</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vision & Mission -->
+  <section class="section-light">
+    <div class="container">
+      <div class="label-tag">Vision & Mission</div>
+      <h2 class="section-h2 dark">To Be the Global Standard for<br>Sensory Ops in Hospitality.</h2>
+      <div class="section-divider divider-blue"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:32px;">
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-eye"></i></div>
+          <h4>Our Vision</h4>
+          <p>We aspire to be the global standard for "Sensory Ops" and non-visible operational accessibility  fostering a future in which hospitality teams operate with total allocation sovereignty, consistent neuroinclusive reliability, and sustainable, data-driven guest relationship management.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-bullseye"></i></div>
+          <h4>Our Mission</h4>
+          <p>To enable UK independent lodging and hospitality SMEs to profile, match, and standardise their room environmental allocations by leveraging "Sensory Ops"  maximising guest comfort, eliminating checkout disputes, and protecting proprietary operational stay memory.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Values -->
+  <section class="section-alt">
+    <div class="container">
+      <div class="label-tag">Core Values</div>
+      <h2 class="section-h2 dark">What Drives Everything We Build</h2>
+      <div class="section-divider divider-blue"></div>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-lightbulb"></i></div>
+          <h4>Innovation</h4>
+          <p>Continuous refinement of "Sensory Ops" environmental matching models to stay ahead of PMS software evolution and the evolving needs of UK neuroinclusive hospitality.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-crosshairs"></i></div>
+          <h4>Accuracy</h4>
+          <p>A commitment to spatial and acoustic data integrity  and the elimination of guest room-allocation mismatches that create operational waste and guest distress.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-lock"></i></div>
+          <h4>Sovereignty</h4>
+          <p>Empowering hoteliers to own and retain their operational stay memory as a proprietary business asset  permanently encoded, never lost to staff turnover.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-tachometer-alt"></i></div>
+          <h4>Efficiency</h4>
+          <p>Making complex, non-visible accessibility configurations accessible through intuitive, low-friction browser-based overlays that work inside existing PMS workflows.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-users"></i></div>
+          <h4>Empowerment</h4>
+          <p>Equipping independent hotel GMs with the operational foresight needed to scale specialised, inclusive guest care without labor-proportional complexity.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-balance-scale"></i></div>
+          <h4>Equity</h4>
+          <p>Democratising enterprise-grade sensory matching for UK SMEs  providing the same neuroinclusive operational intelligence previously available only to multinational luxury chains.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Founder -->
+  <section class="section-light">
+    <div class="container">
+      <div class="label-tag">Founder</div>
+      <h2 class="section-h2 dark">Meet the Founder Behind NeuroStay Engine</h2>
+      <div class="section-divider divider-blue"></div>
+      <div class="founders-grid">
+        <div class="founder-card">
+          <div class="founder-img">NP</div>
+          <h3>Nirose Prajapati</h3>
+          <div class="role">Founder & CEO · NeuroStay Engine</div>
+          <p>Nirose brings over 3 years of direct UK hotel operations experience  including Night Receptionist at Hotel Indigo Coventry, Receptionist at Campanile Hotel Birmingham (Opera PMS), and Nights Porter at Holiday Inn Birmingham Airport NEC. She personally mapped over 2,500 hourly decibel and light-lux data points across UK hotel properties, achieving 92% guest-room comfort correlation in prototype runs. Her Bachelor's in International Hospitality Management (North Chiangmai University) and UK credentials (PCI DSS, Customer Service, Health & Safety Level 2) provide the unique domain mastery to build NeuroStay Engine from the front desk up.</p>
+          <div class="founder-badges">
+            <span class="f-badge">Hotel Indigo Coventry</span>
+            <span class="f-badge">Campanile Hotel Birmingham</span>
+            <span class="f-badge">Opera PMS Expert</span>
+            <span class="f-badge">Night Audit Specialist</span>
+            <span class="f-badge">PCI DSS Certified</span>
+            <span class="f-badge">International Hospitality BSc</span>
+          </div>
+        </div>
+        <div class="founder-card">
+          <div class="founder-img" style="font-size:16px;text-align:center;line-height:1.2;padding:8px;">⭐</div>
+          <h3>Founder–Product–Market Fit</h3>
+          <div class="role">Exceptional Alignment · Built from Front-Line Experience</div>
+          <p>NeuroStay Engine represents a rare and powerful founder-problem-market alignment. Nirose personally experienced the exact operational friction that NeuroStay Engine solves  handling reservation databases and check-in disputes at Hotel Indigo Coventry and Campanile Hotel Birmingham, identifying the administrative bottlenecks of legacy Opera PMS unindexed guest comments. The platform was born from her validated spreadsheet-based Sensory Stay Room-Fingerprint prototype, which achieved a 92% guest-room comfort correlation before a single line of platform code was written.</p>
+          <div class="founder-badges">
+            <span class="f-badge">92% Comfort Correlation Prototype</span>
+            <span class="f-badge">2,500+ Data Points Mapped</span>
+            <span class="f-badge">SensoryStay.io Creator</span>
+            <span class="f-badge">UK GDPR Compliant</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- end page about -->
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE : PLATFORM
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-platform">
+  <section style="background:linear-gradient(140deg,#E8F4F9 0%,#CAE9F5 60%,#ADE8F4 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);">
+    <div class="container">
+      <div class="label-tag">Platform</div>
+      <h2 class="section-h2 dark">Six Modules. One Complete<br><span style="color:var(--blue-dark);">Sensory Ops Intelligence Platform.</span></h2>
+      <div class="section-divider divider-blue"></div>
+      <p class="para-dark" style="max-width:680px;margin-bottom:40px;">NeuroStay Engine combines room environmental profiling, guest preference vectoring, real-time risk scoring, stay-outcome learning, federated benchmarking, and PMS-agnostic integration into one modular SaaS platform. From reactive crisis management to proactive sensory room matching  all in under three clicks.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('contact')">Request a Demo →</button>
+        <button class="btn-secondary" onclick="showPage('pricing')">View Pricing</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-light">
+    <div class="container">
+      <div class="platform-grid">
+        <div class="platform-card">
+          <div class="platform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80" alt="Sensory Room Fingerprint Engine">
+          </div>
+          <div class="inner">
+            <div class="element-badge">Module 01</div>
+            <h3>Sensory Room Fingerprint Engine</h3>
+            <p>Maps and fingerprints every hotel room's physical and environmental profile  ambient decibel peaks, lighting lux exposure, corridor layouts, and high-traffic transit routes.</p>
+            <div class="more-text">Uses machine learning and spatial data analysis to assign an empirical sensory index to each room. Performance-linked room attributes are derived from real-world outcomes, creating reusable, benchmarked hospitality assets that persist through staff turnover and enable instant expert-level room allocations.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Learn More</button>
+          </div>
+        </div>
+
+        <div class="platform-card">
+          <div class="platform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80" alt="Compatibility Matching Algorithm">
+          </div>
+          <div class="inner">
+            <div class="element-badge">Module 02</div>
+            <h3>Compatibility Matching Algorithm (GPV)</h3>
+            <p>Automatically deconstructs unstructured guest reservation requests into a structured Guest Preference Vector (GPV), mapped against available room fingerprints with a compatibility percentage score.</p>
+            <div class="more-text">Completely removes the need for reception staff to have medical or psychological expertise. Coupled with the Real-Time Sensory Risk Scoring Module, the system identifies exactly where a room assignment breaks down  whether due to elevator noise, street-light glare, or HVAC drift  and provides actionable fallback re-scoring.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Learn More</button>
+          </div>
+        </div>
+
+        <div class="platform-card">
+          <div class="platform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&q=80" alt="Real-Time Sensory Risk Scoring">
+          </div>
+          <div class="inner">
+            <div class="element-badge">Module 03</div>
+            <h3>Real-Time Sensory Risk Scoring</h3>
+            <p>Automatically calculates a live "Sensory Disruption Risk" score by cross-referencing upcoming hotel maintenance, adjacent building work, private events, or high-occupancy housekeeping shifts.</p>
+            <div class="more-text">Proactively flags high-risk room assignments to prevent acute guest sensory overwhelm before check-in. The Sensory-to-Stay Twin Simulation virtually tests alternative room configurations and backup service pathways against a guest's preference vector during peak occupancies or unforeseen disruptions.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Learn More</button>
+          </div>
+        </div>
+
+        <div class="platform-card">
+          <div class="platform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=600&q=80" alt="Stay Outcome Learning Memory">
+          </div>
+          <div class="inner">
+            <div class="element-badge">Module 04</div>
+            <h3>Stay-Outcome Learning Memory (OLM)</h3>
+            <p>Post-stay feedback events are transformed into structured "Stay Intelligence Assets" using proprietary matching algorithms that map guest satisfaction ratings back to the original room fingerprint.</p>
+            <div class="more-text">The OLM is a self-optimising, closed-loop framework that continuously refines matching parameters and staff workflow SOPs for subsequent reservations. Links specific sensory matches to key property metrics  occupancy rates, direct bookings, refund reductions  providing direct ROI evidence for accessible tourism investment.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Learn More</button>
+          </div>
+        </div>
+
+        <div class="platform-card">
+          <div class="platform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1529619768328-e37af76c6fe5?w=600&q=80" alt="Community Inclusion Network">
+          </div>
+          <div class="inner">
+            <div class="element-badge">Module 05</div>
+            <h3>Community Inclusion Network (CIN)</h3>
+            <p>A privacy-first federated learning architecture enabling anonymised "Sensory-Aware Stay" outcomes and room matching patterns from UK hotel properties to constantly train matching models.</p>
+            <div class="more-text">Patterns learned from successful sensory matches in historical Manchester hotels can optimise room-matching logic for independent boutique properties in Edinburgh  creating a collective intelligence ecosystem. Fully compliant with UK ICO GDPR standards while building an insurmountable data moat representing the £15.3 billion Purple Pound market.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Learn More</button>
+          </div>
+        </div>
+
+        <div class="platform-card">
+          <div class="platform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80" alt="PMS Agnostic Integration">
+          </div>
+          <div class="inner">
+            <div class="element-badge">Module 06</div>
+            <h3>PMS-Agnostic Integration Layer</h3>
+            <p>Built to sit cleanly above existing Property Management Systems  Opera PMS, Mews, Guestline, Cloudbeds  via standard API syncs. Under three clicks for front-desk agents.</p>
+            <div class="more-text">A lightweight browser-extension overlay reads guest booking streams from standard PMS platforms and instantly returns optimal sensory matches without requiring expensive backend API changes. Reducing property onboarding from weeks to hours, this integration layer ensures seamless adoption for the UK's busiest hotel front-desk teams.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Learn More</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Competitor Comparison Table -->
+      <div style="margin-top:72px;">
+        <div class="label-tag">Competitor Analysis</div>
+        <h2 class="section-h2 dark">NeuroStay Engine vs The Market</h2>
+        <div class="section-divider divider-blue"></div>
+        <div class="comp-table-wrap">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Feature / Capability</th>
+                <th>Legacy PMS (Opera / Mews)</th>
+                <th>Access Directories (AccessAble)</th>
+                <th>Guest Apps (Canary / Revinate)</th>
+                <th>NeuroStay Engine</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Closed-Loop Sensory-to-Stay Mapping</td><td class="no">No (Static Notes)</td><td class="no">No (PDF/Web only)</td><td class="no">No</td><td class="yes highlight-col">✓ Automated spatial & sensory mapping</td></tr>
+              <tr><td>Predictive "Sensory Disruption" Forensics</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="yes highlight-col">✓ Real-time risk scoring for noise/events</td></tr>
+              <tr><td>UK-Specific Sector Benchmarking</td><td class="no">No</td><td class="no">Static UK listings only</td><td class="no">No</td><td class="yes highlight-col">✓ UK Grade II properties & localised noise</td></tr>
+              <tr><td>Guest Preference Vector (GPV)</td><td class="no">Limited (unstructured)</td><td class="no">No (manual list only)</td><td class="no">No</td><td class="yes highlight-col">✓ Custom Guest Preference Vector mapping</td></tr>
+              <tr><td>Stay-Outcome Learning Memory</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="yes highlight-col">✓ Dynamic room & workflow post-stay OLM</td></tr>
+              <tr><td>"Stay Equity" Analytics</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="yes highlight-col">✓ Retention & occupancy ROI metrics</td></tr>
+              <tr><td>Federated Community Inclusion Network</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="yes highlight-col">✓ Anonymised CIN Benchmarking</td></tr>
+              <tr><td>Target Customer Segment</td><td class="no">Global Enterprise</td><td class="no">Municipalities & Venues</td><td class="no">General Mid-to-Large Hotels</td><td class="yes highlight-col">✓ UK Boutique & Independent Hotels</td></tr>
+              <tr><td>Ease of Adoption for UK Hoteliers</td><td class="no">Low (heavy implementation)</td><td class="no">Moderate (physical audits)</td><td class="no">High (CRM integration)</td><td class="yes highlight-col">✓ PMS-Agnostic API + browser overlay</td></tr>
+              <tr><td>Cost Structure</td><td class="no">High per-room pricing</td><td class="no">Upfront static audit fees</td><td class="no">Seat/volume-based fees</td><td class="yes highlight-col">✓ SME-optimised SaaS + direct ROI linking</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- end page platform -->
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE : MARKET
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-market">
+  <section style="background:linear-gradient(140deg,#E8F4F9 0%,#CAE9F5 50%,#ADE8F4 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);">
+    <div class="container">
+      <div class="label-tag">Market Analysis</div>
+      <h2 class="section-h2 dark">A £15.3 Billion Market Underserved.<br><span style="color:var(--blue-dark);">NeuroStay Engine Is the Solution.</span></h2>
+      <div class="section-divider divider-blue"></div>
+      <p class="para-dark" style="max-width:680px;margin-bottom:40px;">The UK accessible tourism market  the "Purple Pound"  reached £15.3 billion in 2025, with disabled travelers representing a massive domestic economic force. Yet 91.2% of UK independent lodging SMEs lack the sensory operational tools to capture their share. The global accessible travel tech market is forecast to reach USD 38.5 billion by 2030 at a 21.1% CAGR.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('contact')">Request Demo →</button>
+        <button class="btn-secondary" onclick="showPage('pricing')">View Pricing</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-light">
+    <div class="container">
+      <div class="label-tag">Market Data & Intelligence</div>
+      <h2 class="section-h2 dark">The Numbers Behind the Opportunity</h2>
+      <div class="section-divider divider-blue"></div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h4>UK Independent Hotel Market by Segment (SAM £M)</h4>
+          <p>Target addressable market across UK boutique hospitality property types</p>
+          <div class="chart-wrap"><canvas id="chartSector"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h4>Key Operational Pain Points  UK Hospitality Survey (182 Responses)</h4>
+          <p>Primary challenges driving NeuroStay Engine adoption</p>
+          <div class="chart-wrap"><canvas id="chartRootCause"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h4>NeuroStay Engine vs Competitors  Capability Radar</h4>
+          <p>Platform capabilities vs. existing market alternatives</p>
+          <div class="chart-wrap"><canvas id="chartRadar"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h4>Accessible Travel Tech Market Growth 2022–2030</h4>
+          <p>Global accessible travel tech market (USD B) + UK adoption trajectory (%)</p>
+          <div class="chart-wrap"><canvas id="chartGrowth"></canvas></div>
+        </div>
+      </div>
+      <div class="charts-grid" style="grid-template-columns:1fr;margin-top:32px;">
+        <div class="chart-card">
+          <h4>NeuroStay Engine Feature Comparison vs Market Average</h4>
+          <p>Capability scores across key Sensory Ops dimensions (out of 100)</p>
+          <div class="chart-wrap"><canvas id="chartPerf"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Revenue Projections -->
+  <section class="section-blue">
+    <div class="container">
+      <div class="label-tag-white">Financial Projections</div>
+      <h2 class="section-h2 white">3-Year Revenue Trajectory</h2>
+      <div class="section-divider divider-white"></div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num">£88K</div>
+          <div class="stat-lbl">Year 1 Revenue · 75 active properties · London & Midlands pilots · SaaS + Onboarding fees</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">£393K</div>
+          <div class="stat-lbl">Year 2 Revenue · 50–100 properties · Full UK launch · £89K net profit · PMS API integrations</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">£799K</div>
+          <div class="stat-lbl">Year 3 Revenue · 200+ UK properties · £205K net profit · EU pilots · CIN scaling</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">20+</div>
+          <div class="stat-lbl">High-value UK-based tech and hospitality roles created by Year 5 at platform maturity</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- end page market -->
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE: PROCESS
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-process">
+  <section style="background:linear-gradient(140deg,#E8F4F9 0%,#CAE9F5 50%,#ADE8F4 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);">
+    <div class="container">
+      <div class="label-tag">How It Works</div>
+      <h2 class="section-h2 dark">From Reactive Room Firefighting<br>to <span style="color:var(--blue-dark);">Proactive Sensory Orchestration</span></h2>
+      <div class="section-divider divider-blue"></div>
+      <p class="para-dark" style="max-width:680px;margin-bottom:40px;">NeuroStay Engine operates as a closed-loop operational intelligence lifecycle  profiling, matching, scoring, learning, benchmarking, and continuously evolving your hotel's sensory allocation logic, so every room assignment is grounded in real data, not guesswork or reactive chaos.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('contact')">Request a Demo →</button>
+        <button class="btn-secondary" onclick="showPage('platform')">Explore Modules</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-light" style="padding-top:clamp(60px,8vw,96px);">
+    <div class="container">
+      <div class="label-tag">The 6-Phase Sensory Intelligence Lifecycle</div>
+      <h2 class="section-h2 dark">A Complete Operational Intelligence Loop  Not Just a Checklist</h2>
+      <div class="section-divider divider-blue"></div>
+
+      <!-- Phase 1 -->
+      <div class="process-step">
+        <div>
+          <div class="step-num">Phase 01 · Audit</div>
+          <h3 class="step-h3">Establish Your Sensory Room Baseline</h3>
+          <p class="step-p">NeuroStay Engine ingests your hotel property data  room spatial layouts, acoustic profiles, lighting lux exposure, corridor configurations, and transit routes  to build a comprehensive "Sensory Room Fingerprint" for every room. Then runs your first set of environmental compatibility diagnostics.</p>
+          <p class="step-p">The Audit phase surfaces the hidden cost of unmanaged sensory room allocation  giving you a precise, data-driven view of your "Neuroinclusive Experience Gap" before any matching strategy is deployed.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <span class="risk-badge risk-blue"><span class="risk-dot"></span>Automated Room Profiling</span>
+            <span class="risk-badge risk-light"><span class="risk-dot"></span>Sensory Fingerprint Report</span>
+            <span class="risk-badge risk-green"><span class="risk-dot"></span>Zero PMS Disruption</span>
+          </div>
+        </div>
+        <div class="step-img">
+          <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=700&q=80" alt="Hotel Room Audit" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="process-step">
+        <div class="step-img">
+          <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&q=80" alt="Guest Preference Matching" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+        </div>
+        <div>
+          <div class="step-num">Phase 02 · Match</div>
+          <h3 class="step-h3">Real-Time Guest Preference Vector Matching</h3>
+          <p class="step-p">The Compatibility Matching Engine ingests live guest reservation requests  tracking sensory needs, cognitive preferences, and historical stay data  automatically deconstructing them into a structured Guest Preference Vector (GPV) on a continuous basis.</p>
+          <p class="step-p">Think of it as a 24/7 sensory concierge  objective, continuous, and immediately actionable without requiring specialist medical knowledge from your front desk team.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <span class="risk-badge risk-blue"><span class="risk-dot"></span>Live GPV Dashboard</span>
+            <span class="risk-badge risk-light"><span class="risk-dot"></span>Automated Preference Alerts</span>
+            <span class="risk-badge risk-blue"><span class="risk-dot"></span>PMS / Reservation Integration</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="process-step">
+        <div>
+          <div class="step-num">Phase 03 · Score</div>
+          <h3 class="step-h3">Sensory Disruption Forensics  Catch Mismatches Before They Cost You</h3>
+          <p class="step-p">The Real-Time Sensory Risk Scoring Module cross-checks actual room environmental conditions against upcoming disruptions  corridor maintenance, kitchen ventilation cycles, street repair work, high-occupancy housekeeping shifts. It catches them all and automatically deconstructs the risk into a structured "Front-Desk Sensory Alert" with one-click fallback options.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <span class="risk-badge risk-green"><span class="risk-dot"></span>Automated Risk Detection</span>
+            <span class="risk-badge risk-blue"><span class="risk-dot"></span>Front-Desk Sensory Alerts</span>
+          </div>
+        </div>
+        <div class="step-img">
+          <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=700&q=80" alt="Risk Scoring Hotel" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="process-step">
+        <div class="step-img">
+          <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=700&q=80" alt="Sensory Intervention" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+        </div>
+        <div>
+          <div class="step-num">Phase 04 · Intervene</div>
+          <h3 class="step-h3">Sensory-to-Stay Twin Simulation  Fallback Room Re-scoring</h3>
+          <p class="step-p">When a sensory mismatch risk is detected, the Stay Twin Simulation automatically virtually tests alternative room configurations and backup service pathways against the guest's preference vector during peak occupancies or unforeseen disruptions  finding the lowest-friction alternative in real time.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <span class="risk-badge risk-blue"><span class="risk-dot"></span>Automated Room Re-scoring</span>
+            <span class="risk-badge risk-light"><span class="risk-dot"></span>Fallback Pathway Simulation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 5 -->
+      <div class="process-step">
+        <div>
+          <div class="step-num">Phase 05 · Benchmark</div>
+          <h3 class="step-h3">Community Inclusion Network  Learn From the Best UK Properties</h3>
+          <p class="step-p">The CIN enables anonymised "Sensory-Aware Stay" benchmarks from UK hotel properties to improve predictive models continuously. Trends from high-efficiency London boutique hotels can inform a Manchester independent's sensory allocation strategy  without revealing sensitive commercial guest data.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <span class="risk-badge risk-blue"><span class="risk-dot"></span>Sector-Wide Sensory Insights</span>
+            <span class="risk-badge risk-green"><span class="risk-dot"></span>Privacy-Safe CIN Benchmarking</span>
+          </div>
+        </div>
+        <div class="step-img">
+          <img src="https://images.unsplash.com/photo-1529619768328-e37af76c6fe5?w=700&q=80" alt="Community Benchmarking" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+        </div>
+      </div>
+
+      <!-- Phase 6 -->
+      <div class="process-step">
+        <div class="step-img">
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=700&q=80" alt="Stay Equity Reporting" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+        </div>
+        <div>
+          <div class="step-num">Phase 06 · Report</div>
+          <h3 class="step-h3">Stay Equity Reporting  From Sensory Data to Strategic Decisions</h3>
+          <p class="step-p">Every insight is delivered as a prioritised, KPI-style "Stay Equity Performance Report"  not raw data exports. Hotel teams receive Sensory Match Scores, Checkout Dispute Reduction metrics, Compliance Audit Trails, and ranked action items ready for immediate deployment.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <span class="risk-badge risk-blue"><span class="risk-dot"></span>Sensory & Occupancy Scores</span>
+            <span class="risk-badge risk-light"><span class="risk-dot"></span>Equality Act Compliance Reports</span>
+            <span class="risk-badge risk-green"><span class="risk-dot"></span>Prioritised Action Items</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div><!-- end page process -->
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE : FAQ
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-faq">
+  <section style="background:linear-gradient(140deg,#E8F4F9 0%,#CAE9F5 60%,#ADE8F4 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);">
+    <div class="container">
+      <div class="label-tag">FAQ</div>
+      <h2 class="section-h2 dark">Frequently Asked Questions</h2>
+      <div class="section-divider divider-blue"></div>
+      <p class="para-dark" style="max-width:600px;">Everything you need to know about NeuroStay Engine and what it means for your hotel's sensory operational efficiency and neuroinclusive guest experience.</p>
+    </div>
+  </section>
+
+  <section class="section-light">
+    <div class="container" style="max-width:840px;">
+      <div class="faq-wrap">
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(this)"><h4>What is NeuroStay Engine and why does my hotel need it?</h4><span class="faq-icon">+</span></div>
+          <div class="faq-body">NeuroStay Engine is an AI-powered operational accessibility and sensory-to-stay automation platform that solves the "Neuroinclusive Experience Gap" in UK boutique and independent hotels. Unlike standard PMS systems that treat accessibility as a static text box, NeuroStay Engine establishes a "Sensory DNA Layer" that profiles every room's environmental characteristics, matches them to guest preferences automatically, and continuously learns from stay outcomes. Pilot results showed a 28% reduction in checkout disputes and 22–35% fewer peak-hour room swaps.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(this)"><h4>How is this different from traditional PMS or accessibility directory tools?</h4><span class="faq-icon">+</span></div>
+          <div class="faq-body">Traditional PMS tools (Opera PMS, Mews) record transactions but cannot act on sensory compatibility in real time. Accessibility directories (AccessAble, WelcoMe) focus on static physical audits completely detached from live room inventory. NeuroStay Engine is the only platform that bridges the "Guest Sensory Preference" to the "Measurable Stay Outcome"  predicting room mismatch risks before check-in rather than reacting to acute guest sensory overwhelm after the damage is done.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(this)"><h4>Which existing hotel systems does NeuroStay Engine integrate with?</h4><span class="faq-icon">+</span></div>
+          <div class="faq-body">NeuroStay Engine is built as a PMS-agnostic SaaS platform  it sits above any underlying Property Management System including Opera PMS, Mews, Guestline, and Cloudbeds. The platform connects via a lightweight browser-extension overlay and standard API sync that captures guest booking streams from existing PMS platforms instantly, without requiring expensive backend API changes or IT-heavy implementation projects. Integration is typically completed within hours, not weeks.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(this)"><h4>What is "Sensory Room Fingerprinting" and why does it matter?</h4><span class="faq-icon">+</span></div>
+          <div class="faq-body">A Sensory Room Fingerprint is the proprietary environmental profile of each hotel room  encoding its ambient decibel peaks, lighting lux levels, proximity to elevator shafts, housekeeping transit patterns, street-light glare risk, and HVAC characteristics. With a 34% guest preference loss rate during UK hotel staff turnover, this institutional knowledge vanishes every time an experienced receptionist leaves. NeuroStay Engine permanently digitises this room allocation expertise  ensuring junior or newly hired staff achieve the same expert-level sensory matches instantly.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(this)"><h4>Is NeuroStay Engine compliant with UK data protection and accessibility law?</h4><span class="faq-icon">+</span></div>
+          <div class="faq-body">Yes. NeuroStay Engine is architecturally designed to comply with UK GDPR and ICO guidance on AI and Data Protection. Because guest sensory preference vectors contain sensitive, special category health data, the platform implements privacy-by-design frameworks with end-to-end tokenised database structures that store preferences separately from standard guest PII. The platform also provides audit-ready compliance trails for the UK Equality Act 2010 and the European Accessibility Act (EAA, June 2025), demonstrating active non-physical "reasonable adjustments" for non-visible disabilities.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(this)"><h4>What hotel types and sectors does NeuroStay Engine serve?</h4><span class="faq-icon">+</span></div>
+          <div class="faq-body">NeuroStay Engine is purpose-built for UK independent boutique hotels, Grade II listed heritage properties (where physical structural retrofits are legally restricted), mid-market regional hotel groups, premium serviced apartments, wellness and country house hotels, and founder-led guesthouses and B&Bs. The platform is particularly powerful for multi-property portfolios needing to prevent "operational logic loss" across rotating receptionist teams and standardise check-in workflows without capital expenditure.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(this)"><h4>How do I get started with NeuroStay Engine?</h4><span class="faq-icon">+</span></div>
+          <div class="faq-body">Getting started is simple  no disruptive system replacement required. After selecting your plan (from £100/month), you complete a Sensory Onboarding session with a one-time £500 PMS API Sync setup where your property's room environmental data is profiled and baseline fingerprints are configured. The browser overlay integrates with your existing PMS (Opera PMS, Mews, Guestline, or Cloudbeds) in hours. Your first Sensory Match Dashboard goes live within 24–48 hours, and our Hotel Success team guides you through the onboarding to ensure maximum value from day one.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- end page faq -->
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE : PRICING
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-pricing">
+  <section style="background:linear-gradient(140deg,#E8F4F9 0%,#CAE9F5 60%,#ADE8F4 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);">
+    <div class="container" style="text-align:center;">
+      <div class="label-tag" style="justify-content:center;">Pricing</div>
+      <h2 class="section-h2 dark">Simple, Transparent Plans<br>for Every Hotel Size</h2>
+      <div class="section-divider divider-blue divider-center"></div>
+      <p class="para-dark" style="max-width:580px;margin:0 auto;">From independent guesthouses to multi-site boutique groups  NeuroStay Engine has a plan designed for your sensory operational needs. SME-optimised pricing starting from just £100/month.</p>
+    </div>
+  </section>
+
+  <section class="section-light">
+    <div class="container">
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-tier">Sensory Core</div>
+          <div class="price-title">Sensory Core Plan</div>
+          <div class="price-amount">£100<span>/mo</span></div>
+          <p class="price-desc">For independent guesthouses, small B&Bs, and heritage properties needing basic room environmental profiling and guest preference mapping.</p>
+          <ul class="price-features">
+            <li>Manual guest profiling & mapping</li>
+            <li>Basic room environmental fingerprinting</li>
+            <li>Dashboard access for front desk</li>
+            <li>Email post-stay feedback tools</li>
+            <li>Standard PMS overlay integration</li>
+            <li>Monthly Stay Equity report</li>
+            <li>Standard hotel success support</li>
+          </ul>
+          <button class="btn-secondary" onclick="showPage('contact')">Get Started</button>
+        </div>
+        <div class="price-card featured">
+          <div class="featured-label">Most Popular</div>
+          <div class="price-tier">Sensory Twin</div>
+          <div class="price-title">Sensory Twin Plan</div>
+          <div class="price-amount">£380<span>/mo</span></div>
+          <p class="price-desc">For independent boutique hotels and mid-scale regional chains needing full automated PMS matching, GPV engine, and staff workflow automation.</p>
+          <ul class="price-features">
+            <li>Automated PMS Room-to-Guest Matching</li>
+            <li>Guest Preference Vector (GPV) engine</li>
+            <li>Browser overlay (Opera PMS / Mews)</li>
+            <li>Staff inclusive workflow automation</li>
+            <li>Real-time disruption risk alerts</li>
+            <li>Stay-Outcome Learning Memory</li>
+            <li>Weekly Stay Equity reports</li>
+            <li>Priority hotel success support</li>
+          </ul>
+          <button class="btn-primary" onclick="showPage('contact')">Start Free Trial</button>
+        </div>
+        <div class="price-card">
+          <div class="price-tier">Inclusion Sovereign</div>
+          <div class="price-title">Inclusion Sovereign</div>
+          <div class="price-amount">£450<span>/mo</span></div>
+          <p class="price-desc">For multi-property hotel portfolios and luxury boutique chains requiring real-time risk scoring, CIN benchmarking, and audit-ready compliance reporting.</p>
+          <ul class="price-features">
+            <li>Real-time Sensory Risk Scoring Engine</li>
+            <li>Automated Fallback Re-scoring Simulation</li>
+            <li>Community Inclusion Network (CIN) access</li>
+            <li>Dedicated Hotel Success Manager</li>
+            <li>Equality Act 2010 compliance reporting</li>
+            <li>Multi-property Sensory DNA benchmarking</li>
+            <li>API licensing capabilities</li>
+            <li>Priority onboarding & staff training</li>
+          </ul>
+          <button class="btn-secondary" onclick="showPage('contact')">Contact Us</button>
+        </div>
+      </div>
+
+      <!-- Add-ons -->
+      <div style="margin-top:60px;">
+        <div class="label-tag">Professional Add-Ons</div>
+        <h3 style="font-family:var(--display);font-size:24px;font-weight:700;color:var(--text-dark);margin-bottom:8px;">Additional Services</h3>
+        <div class="section-divider divider-blue"></div>
+        <div class="addons-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:32px;">
+          <div class="why-card">
+            <div class="why-icon"><i class="fas fa-plug"></i></div>
+            <h4>Sensory Onboarding & PMS API Sync</h4>
+            <p>One-time property setup, core PMS API calibration (Opera PMS, Mews, Guestline), database sync, and front-of-house staff dashboard configuration. <strong style="color:var(--blue-dark);">£500 per property.</strong></p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon"><i class="fas fa-search-dollar"></i></div>
+            <h4>Sensory Forensic Health Assessment</h4>
+            <p>Custom environmental property profiling, on-site/remote acoustic and light sensor baseline auditing, and team-wide "Sensory Ops" operational training workshop. <strong style="color:var(--blue-dark);">£550 per property.</strong></p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon"><i class="fas fa-chart-line"></i></div>
+            <h4>Premium Stay Equity Reports</h4>
+            <p>Advanced sector benchmarking and "Stay Equity" growth insights tracking refund reduction, direct-booking improvements, and Purple Pound occupancy gains. <strong style="color:var(--blue-dark);">£1,500–£4,000/year.</strong></p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon"><i class="fas fa-globe"></i></div>
+            <h4>International Expansion Support</h4>
+            <p>Platform configuration for EU markets (Paris, Barcelona, Amsterdam) and North American boutique lodging, including regional accessibility compliance modules. <strong style="color:var(--blue-dark);">Custom pricing.</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- end page pricing -->
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE : CONTACT
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-contact">
+  <section style="background:linear-gradient(140deg,#E8F4F9 0%,#CAE9F5 60%,#ADE8F4 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);">
+    <div class="container">
+      <div class="label-tag">Contact & Demo</div>
+      <h2 class="section-h2 dark">Request a Demo or<br><span style="color:var(--blue-dark);">Join Our Pilot Programme</span></h2>
+      <div class="section-divider divider-blue"></div>
+      <p class="para-dark" style="max-width:600px;">Our personalised demos show your hotel's actual Sensory Room Fingerprint baseline, Front-Desk Compatibility Dashboard, and Stay Equity scores  using your real property context, not generic examples.</p>
+    </div>
+  </section>
+
+  <section class="section-light">
+    <div class="container">
+      <div class="contact-wrap">
+        <!-- CONTACT FORM -->
+        <div class="contact-form">
+          <h3>Book Your Platform Demo</h3>
+          <p>Fill in your details and our Hotel Success team will contact you within 24 hours.</p>
+
+          <form action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="97bf6871-82d1-401e-96bf-65dfd307992e">
+            <input type="hidden" name="subject" value="New NeuroStay Engine Demo Request">
+            <input type="hidden" name="from_name" value="NeuroStay Engine Website">
+
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" name="name" placeholder="Your full name" required>
+            </div>
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" name="email" placeholder="your@hotel.co.uk" required>
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" name="phone" placeholder="+44 7XXX XXXXXX">
+            </div>
+            <div class="form-group">
+              <label>Hotel / Property Name</label>
+              <input type="text" name="hotel_name" placeholder="Your hotel or hospitality group name">
+            </div>
+            <div class="form-group">
+              <label>Property Type</label>
+              <select name="property_type">
+                <option>Independent Boutique Hotel</option>
+                <option>Heritage / Grade II Listed Property</option>
+                <option>Serviced Apartment / Apart-Hotel</option>
+                <option>Regional Hotel Group</option>
+                <option>Wellness / Country House Hotel</option>
+                <option>Guesthouse / B&B</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Current PMS System</label>
+              <select name="pms_system">
+                <option>Opera PMS</option>
+                <option>Mews</option>
+                <option>Guestline</option>
+                <option>Cloudbeds</option>
+                <option>Other</option>
+                <option>None / Manual</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>What are you most interested in?</label>
+              <textarea name="message" placeholder="Tell us about your current sensory room allocation challenges, checkout disputes, or the features you'd like to explore..." required></textarea>
+            </div>
+            <button class="btn-primary" style="width:100%;justify-content:center;" type="submit">Request Demo →</button>
+          </form>
+        </div>
+
+        <!-- CONTACT INFO -->
+        <div class="contact-info">
+          <h3>Why Book a Demo?</h3>
+          <p>Our personalised demos show your hotel's actual Sensory Room Fingerprint baseline, real-time Compatibility Matching dashboard, and Stay Equity scores using your real property context  not generic presentations. We demonstrate how the Sensory Room Fingerprint Engine, Guest Preference Vector matching, and Real-Time Sensory Risk Scoring work together to reduce checkout disputes, eliminate room swaps, ensure Equality Act compliance, and convert the Purple Pound into direct bookings in real time. Every demo is tailored to your hotel's PMS workflow, room configuration, and neuroinclusive challenges.</p>
+
+          <div class="contact-detail">
+            <div class="icon"><i class="fas fa-envelope"></i></div>
+            <div class="text">
+              <strong>Email Us</strong>
+              <span>neurostayengineuk@outlook.com</span>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="icon"><i class="fas fa-phone"></i></div>
+            <div class="text">
+              <strong>Phone</strong>
+              <span>+44 7769 385904 · Nirose Prajapati</span>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="text">
+              <strong>UK Headquarters</strong>
+              <span>Birmingham B26 1LD, West Midlands & London, United Kingdom</span>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="icon"><i class="fas fa-clock"></i></div>
+            <div class="text">
+              <strong>Response Time</strong>
+              <span>Within 24 hours · Mon–Fri 9am–6pm GMT</span>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="text">
+              <strong>Data Privacy</strong>
+              <span>UK GDPR · ICO Registered · PCI DSS Compliant</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- end page contact -->
+
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">NeuroStay Engine</div>
+        <p class="footer-desc">The UK's first AI-powered Sensory Ops and operational accessibility platform  profiling, matching, and standardising room environmental allocations for neuroinclusive hospitality. Understand Minds. Match Rooms. Transform Stays.</p>
+        <div class="footer-badges">
+          <span class="footer-badge">UK GDPR Compliant</span>
+          <span class="footer-badge">ICO Registered</span>
+          <span class="footer-badge">Equality Act 2010 Aligned</span>
+          <span class="footer-badge">PCI DSS Compliant</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <div class="footer-col">
+          <a onclick="showPage('platform')">Sensory Room Fingerprint Engine</a>
+          <a onclick="showPage('platform')">Compatibility Matching (GPV)</a>
+          <a onclick="showPage('platform')">Real-Time Risk Scoring</a>
+          <a onclick="showPage('platform')">Stay-Outcome Learning Memory</a>
+          <a onclick="showPage('platform')">Community Inclusion Network</a>
+          <a onclick="showPage('platform')">PMS-Agnostic Integration</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <div class="footer-col">
+          <a onclick="showPage('about')">About NeuroStay Engine</a>
+          <a onclick="showPage('about')">Nirose Prajapati · Founder & CEO</a>
+          <a onclick="showPage('process')">How It Works</a>
+          <a onclick="showPage('faq')">FAQ</a>
+          <a onclick="showPage('market')">Market Analysis</a>
+          <a onclick="showPage('pricing')">Pricing & Plans</a>
+          <a onclick="showPage('contact')">Request a Demo</a>
+          <a onclick="showPage('contact')">Pilot Programme</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Solutions</div>
+        <div class="footer-col">
+          <a onclick="showPage('platform')">Independent Boutique Hotels</a>
+          <a onclick="showPage('platform')">Grade II Listed Properties</a>
+          <a onclick="showPage('platform')">Serviced Apartments</a>
+          <a onclick="showPage('platform')">Wellness & Country Houses</a>
+          <a onclick="showPage('pricing')">Sensory Core · £100/mo</a>
+          <a onclick="showPage('pricing')">Sensory Twin · £380/mo</a>
+          <a onclick="showPage('pricing')">Inclusion Sovereign · £450/mo</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom-bar">
+      <p>© 2026 <span>NeuroStay Engine</span> · Birmingham & London, UK · UK GDPR Compliant · by Nirose Prajapati</p>
+      <div class="footer-bottom-links">
+        <a onclick="showPage('contact')">Privacy Policy</a>
+        <a onclick="showPage('contact')">Terms of Service</a>
+        <a onclick="showPage('contact')">Confidential Business Plan</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+/* ─── PAGE NAV ───────────────────────────────── */
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links button').forEach(b=>b.classList.remove('active'));
+  const pg=document.getElementById('page-'+name);
+  if(pg){pg.classList.add('active');}
+  const btn=document.getElementById('nav-'+name);
+  if(btn){btn.classList.add('active');}
+  window.scrollTo({top:0,behavior:'instant'});
+  if(name==='market'&&!window.marketChartsLoaded){initMarketCharts();window.marketChartsLoaded=true;}
+}
+
+function toggleCard(btn){
+  const card=btn.closest('.platform-card');
+  card.classList.toggle('open');
+  btn.innerHTML=card.classList.contains('open')?'Show Less':'Learn More';
+}
+
+function toggleFAQ(el){el.parentElement.classList.toggle('open');}
+
+function closeMobile(){
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
+document.getElementById('hamburger').addEventListener('click',function(){
+  this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open');
+});
+
+/* ─── CHART THEME ────────────────────────────── */
+const BLU='rgba(11,79,108,1)';
+const BLU2='rgba(11,79,108,0.7)';
+const BLU3='rgba(11,79,108,0.35)';
+const LBLU='rgba(0,180,216,0.8)';
+const LBLU2='rgba(173,232,244,0.7)';
+const GRID='rgba(11,79,108,0.08)';
+const MUTED='rgba(13,58,80,0.8)';
+
+Chart.defaults.font.family="'IBM Plex Mono', monospace";
+Chart.defaults.font.size=11;
+Chart.defaults.color=MUTED;
+
+/* ─── MARKET CHARTS ──────────────────────────── */
+function initMarketCharts(){
+  // UK Hotel SAM by Segment
+  new Chart(document.getElementById('chartSector').getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:['Independent Boutique Hotels','Heritage/Grade II Listed','Serviced Apartments','Regional Hotel Groups'],
+      datasets:[{
+        label:'SAM (£ Millions)',
+        data:[180,95,75,120],
+        backgroundColor:[BLU,BLU2,BLU3,LBLU],
+        borderRadius:6,barPercentage:0.6
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:MUTED,font:{size:9}}},y:{grid:{color:GRID},ticks:{color:MUTED,callback:v=>'£'+v+'M'}}}}
+  });
+
+  // Pain Points Doughnut
+  new Chart(document.getElementById('chartRootCause').getContext('2d'),{
+    type:'doughnut',
+    data:{
+      labels:['Checkout inconsistency & no receptionist guidance (28%)','No structured room sensory profiling (27.5%)','GDPR concerns storing guest health data (17.6%)','Staff onboarding & training barriers (17.6%)','Budget/procurement constraints (9.3%)'],
+      datasets:[{
+        data:[28,27.5,17.6,17.6,9.3],
+        backgroundColor:[BLU,BLU2,BLU3,LBLU,LBLU2],
+        borderColor:['rgba(11,79,108,0.9)','rgba(11,79,108,0.7)','rgba(11,79,108,0.4)','rgba(0,180,216,0.8)','rgba(173,232,244,0.8)'],
+        borderWidth:1.5
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:MUTED,boxWidth:10,padding:10,font:{size:10}}}}}
+  });
+
+  // Radar Competitive
+  new Chart(document.getElementById('chartRadar').getContext('2d'),{
+    type:'radar',
+    data:{
+      labels:['Sensory Room Fingerprinting','Guest Preference Vectoring','Real-Time Risk Scoring','Stay Outcome Learning','CIN Benchmarking','Equality Act Compliance'],
+      datasets:[
+        {label:'NeuroStay Engine',data:[5,5,5,5,5,5],backgroundColor:'rgba(11,79,108,0.1)',borderColor:BLU,borderWidth:2,pointBackgroundColor:BLU},
+        {label:'Legacy PMS (Opera/Mews)',data:[1,1,1,1,1,2],backgroundColor:'rgba(0,180,216,0.06)',borderColor:LBLU,borderWidth:1.5,pointBackgroundColor:LBLU},
+        {label:'Access Directories (AccessAble)',data:[1,1,1,1,1,3],backgroundColor:'rgba(0,180,216,0.05)',borderColor:'rgba(0,180,216,0.5)',borderWidth:1.5,pointBackgroundColor:'rgba(0,180,216,0.5)'},
+        {label:'Guest Apps (Canary/Revinate)',data:[1,2,1,1,1,1],backgroundColor:'rgba(13,58,80,0.05)',borderColor:'rgba(13,58,80,0.4)',borderWidth:1.5,pointBackgroundColor:'rgba(13,58,80,0.4)'},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:MUTED,boxWidth:10,padding:14,font:{size:10}}}},scales:{r:{backgroundColor:'rgba(11,79,108,0.01)',grid:{color:GRID},pointLabels:{color:MUTED,font:{size:10}},ticks:{display:false},min:0,max:5}}}
+  });
+
+  // Market Growth
+  new Chart(document.getElementById('chartGrowth').getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:['2022','2023','2024','2025','2026','2027','2028','2030'],
+      datasets:[
+        {label:'Global Accessible Travel Tech Market (USD B)',data:[6,9,14,20,26,32,38,55],backgroundColor:BLU2,borderRadius:5,barPercentage:0.55},
+        {type:'line',label:'UK Neuroinclusive Hospitality Adoption %',data:[null,3,6,10,18,30,42,65],borderColor:LBLU,borderWidth:2,yAxisID:'y2',tension:0.4,pointBackgroundColor:LBLU,fill:false}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:MUTED,boxWidth:10,padding:12,font:{size:10}}}},scales:{x:{grid:{color:GRID},ticks:{color:MUTED}},y:{grid:{color:GRID},ticks:{color:MUTED,callback:v=>'$'+v+'B'}},y2:{position:'right',grid:{display:false},ticks:{color:MUTED,callback:v=>v+'%'}}}}
+  });
+
+  // Performance Comparison
+  new Chart(document.getElementById('chartPerf').getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:['Sensory Room Fingerprinting','GPV Compatibility Matching','Real-Time Risk Scoring','Stay-Outcome Learning','CIN Benchmarking','Equality Act Compliance'],
+      datasets:[
+        {label:'NeuroStay Engine',data:[98,96,95,97,93,98],backgroundColor:BLU2,borderRadius:5,barPercentage:0.35},
+        {label:'Legacy Market Average',data:[4,3,2,1,1,5],backgroundColor:LBLU2,borderRadius:5,barPercentage:0.35}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:MUTED,boxWidth:10,padding:14,font:{size:10}}}},scales:{x:{grid:{color:GRID},ticks:{color:MUTED,font:{size:9}}},y:{grid:{color:GRID},ticks:{color:MUTED,callback:v=>v+' pts'}}}}
+  });
+}
+</script>
+</body>
+</html>
